@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House Ward — WoW Forever Roleplaying Guild</title>
+    <style>
+        :root {
+            --bg-dark: #0b0d10;
+            --bg-panel: #141820;
+            --bg-card: #1c222e;
+            --border-gold: #c5a059;
+            --text-gold: #f4d068;
+            --text-light: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: var(--font-main);
+            line-height: 1.6;
+            background-image: linear-gradient(rgba(11, 13, 16, 0.9), rgba(11, 13, 16, 0.95)),
+                              url('Alliance.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 2rem;
+            border-bottom: 2px solid var(--border-gold);
+            background: linear-gradient(to bottom, rgba(20, 24, 32, 0.8), rgba(11, 13, 16, 1));
+            position: relative;
+        }
+
+        header h1 {
+            font-size: 3.5rem;
+            color: var(--text-gold);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        header p {
+            font-style: italic;
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        header .header-context {
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            font-style: normal;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.3);
+            padding-bottom: 1rem;
+        }
+
+        .tab-btn {
+            background: var(--bg-panel);
+            color: var(--text-light);
+            border: 1px solid rgba(197, 160, 89, 0.4);
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            background: var(--border-gold);
+            color: var(--bg-dark);
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(197, 160, 89, 0.4);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Lore Tab Styles */
+        .lore-panel {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-gold);
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .lore-panel h2 {
+            color: var(--text-gold);
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+            padding-bottom: 0.5rem;
+        }
+
+        .lore-panel p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            color: #cbd5e1;
+        }
+
+        .blockquote {
+            border-left: 4px solid var(--border-gold);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: var(--text-gold);
+            font-size: 1.2rem;
+            background: rgba(197, 160, 89, 0.05);
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+
+        /* Roster Grid Styles */
+        .roster-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .member-card {
+            background: var(--bg-panel);
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            border-radius: 6px;
+            overflow: hidden;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .member-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--border-gold);
+            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.15);
+        }
+
+        .card-header {
+            background: var(--bg-card);
+            padding: 1.25rem;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+        }
+
+        .card-header h3 {
+            color: var(--text-gold);
+            font-size: 1.4rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .card-subtitle {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+        }
+
+        .card-body {
+            padding: 1.25rem;
+            flex-grow: 1;
+        }
+
+        .meta-line {
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .meta-label {
+            color: var(--text-gold);
+            font-weight: 600;
+        }
+
+        .card-text {
+            margin-top: 1rem;
+            font-size: 0.95rem;
+            color: #cbd5e1;
+            border-top: 1px dashed rgba(255,255,255,0.1);
+            padding-top: 1rem;
+        }
+
+        .character-lore {
+            margin-top: 1rem;
+            border-top: 1px dashed rgba(255,255,255,0.1);
+            padding-top: 1rem;
+        }
+
+        .character-lore summary {
+            color: var(--text-gold);
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .character-lore summary:focus-visible {
+            outline: 2px solid var(--text-gold);
+            outline-offset: 3px;
+        }
+
+        .character-lore p {
+            margin-top: 0.85rem;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+        }
+
+        .member-details {
+            margin-top: 1rem;
+            border-top: 1px dashed rgba(255,255,255,0.1);
+            padding-top: 0.5rem;
+        }
+
+        /* Matrix Styles */
+        .matrix-list {
+            list-style: none;
+        }
+
+        .matrix-item {
+            background: var(--bg-panel);
+            margin-bottom: 1rem;
+            padding: 1.25rem;
+            border-left: 4px solid var(--border-gold);
+            border-radius: 0 6px 6px 0;
+            font-size: 1.1rem;
+        }
+
+        /* Application guidance */
+        .join-form {
+            background: var(--bg-panel);
+            border: 1px solid var(--border-gold);
+            padding: 2.5rem;
+            border-radius: 8px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(197, 160, 89, 0.2);
+            margin-top: 4rem;
+        }
+
+        .section-intro {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .faction-heading {
+            color: var(--text-gold);
+            font-size: 1.5rem;
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.3);
+        }
+
+        .relation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .relation-card {
+            background: var(--bg-panel);
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            border-radius: 6px;
+            padding: 1.5rem;
+        }
+
+        .relation-card h2 {
+            color: var(--text-gold);
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .join-note {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin: 0 0 1.5rem;
+        }
+
+        .application-steps {
+            margin: 0 0 1.5rem 1.25rem;
+            color: #cbd5e1;
+        }
+
+        .application-steps li {
+            margin-bottom: 0.75rem;
+            padding-left: 0.35rem;
+        }
+
+        .oath-example {
+            margin: 0.75rem 0 1.5rem;
+            padding: 1rem 1.25rem;
+            border-left: 4px solid var(--border-gold);
+            background: rgba(197, 160, 89, 0.05);
+            color: #cbd5e1;
+        }
+
+        .oath-example strong {
+            display: block;
+            color: var(--text-gold);
+            margin-bottom: 0.4rem;
+        }
+
+        .join-form h2 {
+            color: var(--text-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .tab-btn:focus-visible {
+            outline: 3px solid var(--text-gold);
+            outline-offset: 3px;
+        }
+
+        @media (max-width: 600px) {
+            header {
+                padding: 3rem 1rem;
+            }
+
+            header h1 {
+                font-size: 2.5rem;
+                letter-spacing: 2px;
+            }
+
+            .container {
+                margin-top: 1.25rem;
+            }
+
+            .tabs {
+                gap: 0.5rem;
+            }
+
+            .tab-btn {
+                flex: 1 1 45%;
+                padding: 0.7rem 0.5rem;
+                font-size: 0.85rem;
+            }
+
+            .roster-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .lore-panel,
+            .join-form {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>House Ward</h1>
+        <p class="header-context">WoW Forever · Roleplaying Ruleset Guild</p>
+        <p>“Different paths, one watch.”</p>
+    </header>
+
+    <div class="container">
+        <nav class="tabs" role="tablist" aria-label="House Ward sections">
+            <button class="tab-btn active" id="tab-lore" type="button" role="tab" aria-selected="true" aria-controls="lore">Chronicles & Values</button>
+            <button class="tab-btn" id="tab-roster" type="button" role="tab" aria-selected="false" aria-controls="roster" tabindex="-1">The Retinue</button>
+            <button class="tab-btn" id="tab-relations" type="button" role="tab" aria-selected="false" aria-controls="relations" tabindex="-1">House Dynamics</button>
+            <button class="tab-btn" id="tab-join" type="button" role="tab" aria-selected="false" aria-controls="join" tabindex="-1">Swear the Oath</button>
+        </nav>
+
+        <!-- LORE TAB -->
+        <section id="lore" class="tab-content active" role="tabpanel" aria-labelledby="tab-lore" tabindex="0">
+            <div class="lore-panel">
+                <h2>Founding Creed</h2>
+                <p>House Ward began as a small human household dedicated to protecting travellers, settlements, and ancient places that larger armies overlooked. Its members believe that protection takes many forms: shield and steel, healing and faith, vigilance in the wild, knowledge of dangerous magic, and even a carefully placed dagger.</p>
+                
+                <div class="blockquote">
+                    “Different paths, one watch.”
+                </div>
+
+                <h2>The Name-Earning Tradition</h2>
+                <p>Those who formally join surrender their former surname and receive a new name ending in <strong>Ward</strong>. The first part reflects the duty, talent, or personal quality through which they serve the House. This ensures the Ward is not merely a bloodline, but a sworn home accepting souls from all races, cultures, and walks of life.</p>
+            </div>
+        </section>
+
+        <!-- ROSTER TAB -->
+        <section id="roster" class="tab-content" role="tabpanel" aria-labelledby="tab-roster" tabindex="0" hidden>
+            <h2 class="faction-heading">Alliance Retinue</h2>
+            <p class="section-intro">Nine sworn members stand watch for the Alliance, each bearing a name earned through service to House Ward.</p>
+            <div class="roster-grid">
+                
+                <!-- Roster entries are populated from the roster data below. -->
+            </div>
+        </section>
+
+        <!-- HOUSE DYNAMICS TAB -->
+        <section id="relations" class="tab-content" role="tabpanel" aria-labelledby="tab-relations" tabindex="0" hidden>
+            <div class="lore-panel">
+                <h2>One Watch, Many Duties</h2>
+                <p>House Ward is a sworn household, not a bloodline. Its members come from different peoples and callings, bound by earned trust and the promise that the vulnerable should never stand alone.</p>
+                <div class="relation-grid">
+                    <article class="relation-card">
+                        <h2>Field partners</h2>
+                        <p>Garrick Wildward is Tiberion Lightward’s trusted scout. Vaelira Duskward works beside him as an infiltrator and intelligence gatherer.</p>
+                    </article>
+                    <article class="relation-card">
+                        <h2>Checks and balances</h2>
+                        <p>Lucian Gloomward and Shalindra Starward challenge one another’s judgement. Her counsel helps keep his dangerous magical studies accountable.</p>
+                    </article>
+                    <article class="relation-card">
+                        <h2>Steel and storm</h2>
+                        <p>Thoric Steelward brought Thorgun Stormward into the House. They still tell very different stories about the mining-site disturbance that first brought them together.</p>
+                    </article>
+                    <article class="relation-card">
+                        <h2>Trust across peoples</h2>
+                        <p>Lunaria Moonward was the first Night Elf to trust the House fully. Aetheria Spellward maintains its magical equipment and regularly debates Thoric about enchantments.</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- JOIN TAB -->
+        <section id="join" class="tab-content" role="tabpanel" aria-labelledby="tab-join" tabindex="0" hidden>
+            <div class="join-form">
+                <h2>Swear the Oath</h2>
+                <p class="join-note">House Ward is an Alliance-only guild on the WoW Forever roleplaying ruleset. There is no online application: membership is discussed in character, in World of Warcraft.</p>
+                <blockquote class="oath-example">
+                    <strong>A required part of joining</strong>
+                    Every accepted character must follow the House naming tradition and take a personal surname ending in “Ward” before joining the guild. Characters who do not adopt a Ward-name cannot join House Ward.
+                </blockquote>
+                <ol class="application-steps">
+                    <li>When one of the nine founding members is online, send them a written in-game message to request an interview.</li>
+                    <li>Arrange a time to meet at the Lion’s Pride Inn in Goldshire. Share your character’s background and why they wish to join.</li>
+                    <li>If you are welcomed into the House, agree on the Ward-name your character will earn. You must adopt this name to join the guild; your character can then be added to the retinue.</li>
+                </ol>
+                <p class="join-note">Need help creating your character’s personal lore or choosing a fitting Ward-name? You are welcome to ask any of the nine founding members for guidance during your interview.</p>
+                <h3 class="meta-label">Example message to request an interview</h3>
+                <blockquote class="oath-example">
+                    “Greetings, [founding member]. I am [character name], an Alliance [race] [class], and I would like to learn more about joining House Ward. Would you be available to meet for an interview at the Lion’s Pride Inn in Goldshire? I’m happy to arrange a time that suits you.”
+                </blockquote>
+                <h3 class="meta-label">Example words for the interview</h3>
+                <blockquote class="oath-example">
+                    “I, [character name], offer my skills and loyalty to House Ward. I will stand watch beside my sworn kin and protect those who cannot protect themselves. Different paths, one watch.”
+                </blockquote>
+                <p class="join-note">These are examples, not required scripts. Make the words your character’s own and speak with whichever founding member is available.</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>House Ward — “Different paths, one watch.”</p>
+    </footer>
+
+    <script>
+        const roster = [
+            {
+                firstName: 'Garrick', surname: 'Wildward', gender: 'Male', race: 'Human', className: 'Hunter', primary: 'DPS', secondary: 'DPS', professions: 'Leatherworking · Skinning',
+                lore: [
+                    'Garrick was raised on the edge of settled human lands, where farms gradually gave way to deep forest. His family supplied meat, hides, and trail guidance to nearby villages. Garrick learned early that the wilderness was neither friend nor enemy. It rewarded respect and punished carelessness.',
+                    'He first encountered House Ward while tracking a wounded creature that had been driven unnaturally close to a human settlement. Garrick discovered that the animal was fleeing a corrupted presence deeper in the forest. Rather than simply killing the creature and collecting its hide, he warned the settlement and guided the Ward expedition sent to investigate.',
+                    'During the journey, Garrick repeatedly placed himself between the group and dangers they had failed to notice. He read broken branches, disturbed soil, and the sudden silence of birds as clearly as others read written words.',
+                    'He joined House Ward because he had seen how poorly walls protected people from dangers they did not understand. He took the name Wildward, becoming the House’s pathfinder and watcher beyond the road. His work as a leatherworker ensures that little from a necessary hunt is wasted.',
+                    'Character traits: Patient, practical, observant, uncomfortable at formal gatherings.',
+                    'Reason for joining: To protect settlements from threats emerging beyond their borders.',
+                    'Role in the House: Scout, tracker, guide, and supplier of wilderness equipment.'
+                ]
+            },
+            {
+                firstName: 'Lucian', surname: 'Gloomward', gender: 'Male', race: 'Human', className: 'Warlock', primary: 'DPS', secondary: 'DPS', professions: 'Enchanting · Tailoring',
+                lore: [
+                    'Lucian was born into an educated human family and trained as a conventional student of magic. His fascination, however, lay with knowledge that respectable tutors preferred to lock away. He believed that forbidden powers could not be opposed effectively by pretending they did not exist.',
+                    'His research eventually brought him into conflict with a secretive magical circle. Lucian discovered that its members were no longer merely studying dangerous forces. They had begun serving them. When he attempted to expose the group, they marked him as a traitor and destroyed much of the evidence.',
+                    'House Ward offered Lucian sanctuary, but not unconditional trust. He was required to reveal what he knew and submit his magical work to scrutiny. Rather than taking offence, Lucian accepted. He understood that anyone practising such magic should be watched, including himself.',
+                    'He earned the name Gloomward because he stands guard over powers that thrive in darkness. He studies curses, hostile enchantments, and forbidden entities so the House can recognise and contain them.',
+                    'Character traits: Intelligent, controlled, dryly humorous, secretive by habit rather than malice.',
+                    'Reason for joining: House Ward gave him the means to fight the dangerous magical circle he had uncovered.',
+                    'Role in the House: Occult specialist, curse-breaker, and adviser on forbidden magic.'
+                ]
+            },
+            {
+                firstName: 'Thoric', surname: 'Steelward', gender: 'Male', race: 'Dwarf', className: 'Warrior', primary: 'Tank', secondary: 'DPS', professions: 'Blacksmith · Mining',
+                lore: [
+                    'Thoric came from a respected dwarven smithing family, but he was never content to remain behind the anvil. He insisted that a smith who crafted weapons and armour should understand how they behaved in battle.',
+                    'His association with House Ward began when he was commissioned to repair equipment for a human expedition. Thoric considered the weapons poorly balanced and the armour impractical, and he refused to let the expedition leave until he had corrected both. When the group was attacked on the road, he fought beside them using a hammer he had forged himself.',
+                    'Afterward, Thoric continued travelling with the Ward company, officially to evaluate his craftsmanship under “proper field conditions.” Months later, everyone involved understood that the supposed evaluation had become permanent.',
+                    'He accepted the name Steelward because steel represents both sides of his character: the craftsman who shapes it and the warrior who stands behind it. Although not human, Thoric became one of the earliest outsiders to be welcomed fully into the House.',
+                    'Character traits: Blunt, dependable, proud of his work, deeply offended by neglected equipment.',
+                    'Reason for joining: He respected the House’s willingness to protect ordinary people rather than pursue glory.',
+                    'Role in the House: Front-line defender, weaponsmith, armourer, and relentlessly critical equipment inspector.'
+                ]
+            },
+            {
+                firstName: 'Aetheria', surname: 'Spellward', gender: 'Female', race: 'Skyborn', className: 'Mage', primary: 'DPS', secondary: 'DPS', professions: 'Enchanting · Tailoring',
+                lore: [
+                    'Aetheria descended from a magical tradition in which control, elegance, and precision were considered signs of character. She learned to shape arcane energy with the same care that a tailor gives to fine fabric.',
+                    'Her path crossed that of House Ward when an unstable magical artefact was being transported through human territory. The House had been hired to guard it, but its escorts did not understand the danger within their own wagon. Aetheria recognised the artefact’s failing enchantments and stabilised it before its power could escape.',
+                    'She initially regarded House Ward as sincere but magically unsophisticated. The House, in turn, found her knowledgeable but somewhat detached from the consequences of arcane accidents. Travelling together changed both opinions. Aetheria saw people risk their lives to protect communities with no wealth or influence, while the House learned the value of disciplined magical expertise.',
+                    'She chose the name Spellward to represent her promise that magic under her care would serve as a shield rather than become an uncontrolled threat.',
+                    'Character traits: Refined, precise, curious, occasionally condescending without intending to be.',
+                    'Reason for joining: She wanted her magical ability to have a purpose beyond study and personal mastery.',
+                    'Role in the House: Arcane specialist, enchanter, magical investigator, and keeper of dangerous artefacts.'
+                ]
+            },
+            {
+                firstName: 'Lunaria', surname: 'Moonward', gender: 'Female', race: 'Night Elf', className: 'Druid', primary: 'Healer', secondary: 'DPS', professions: 'Alchemy · Herbalism',
+                lore: [
+                    'Lunaria spent much of her life tending places where the boundary between the natural and supernatural had grown thin. She regarded healing not as the removal of pain alone, but as the restoration of balance.',
+                    'She encountered House Ward after humans established a camp near a spiritually sensitive woodland. Lunaria initially assumed that the outsiders were responsible for the disturbance spreading through the area. Instead, she discovered them defending both the settlers and the forest from creatures twisted by an unnatural influence.',
+                    'Lunaria helped cleanse the affected land and treated the wounded with remedies prepared from local herbs. She was surprised by the House’s willingness to abandon valuable resources when she explained that harvesting them would cause lasting damage.',
+                    'She did not join immediately. For a time, she watched the House from a distance. Only after seeing its members keep their promises when no Night Elf was present to judge them did she accept their invitation.',
+                    'The name Moonward signifies her duty to carry the wisdom and restraint of her people beyond their forests.',
+                    'Character traits: Compassionate, serene, quietly stubborn, slow to trust and slower to abandon someone.',
+                    'Reason for joining: She recognised that cooperation with honourable outsiders could protect places isolation alone could not.',
+                    'Role in the House: Healer, herbalist, mediator, and guardian of natural and spiritual balance.'
+                ]
+            },
+            {
+                firstName: 'Tiberion', surname: 'Lightward', gender: 'Male', race: 'Human', className: 'Paladin', primary: 'Tank', secondary: 'DPS', professions: 'Blacksmith · Mining',
+                lore: [
+                    'Tiberion was raised in a human household that valued duty, skilled labour, and public service. He trained as both a warrior of the Light and a blacksmith, believing that faith without useful action was little more than ceremony.',
+                    'Before House Ward existed formally, Tiberion was one of the people who gathered to defend a remote community that the authorities considered strategically unimportant. The defenders came from different backgrounds and shared neither command nor allegiance. Tiberion held them together through discipline, calm judgement, and a simple promise: no one who stood with them would be abandoned.',
+                    'The successful defence became the foundation of House Ward. Tiberion did not claim lordship over the others. Instead, he proposed a household bound through service and oath rather than birth.',
+                    'He took the name Lightward as both a statement of faith and a warning to himself. He does not consider the Light his possession. He considers himself responsible for guarding the principles it represents.',
+                    'Character traits: Honourable, disciplined, protective, prone to accepting too much responsibility.',
+                    'Reason for joining: He helped establish House Ward and shaped its original oath.',
+                    'Role in the House: Commander, defender, moral centre, and master armourer.'
+                ]
+            },
+            {
+                firstName: 'Shalindra', surname: 'Starward', gender: 'Female', race: 'Night Elf', className: 'Priest', primary: 'Healer', secondary: 'DPS', professions: 'Enchanting · Tailoring',
+                lore: [
+                    'Shalindra served her people as a priest and keeper of sacred traditions. Where Lunaria listened to the land, Shalindra studied signs in moonlight, dreams, and the movement of the stars.',
+                    'Her connection to House Ward began through Lunaria. Shalindra was suspicious of the organisation and particularly wary of Lucian Gloomward’s presence within it. She travelled with the House not as a member, but as an observer charged with judging whether its intentions were genuine.',
+                    'During that journey, Shalindra witnessed Lucian refuse an opportunity to seize a source of dangerous power, despite knowing it could have strengthened him. She also saw Tiberion place the safety of strangers above the reputation of his House. These actions did not eliminate her caution, but they convinced her that House Ward was capable of holding its members accountable.',
+                    'She accepted the name Starward, representing vigilance, spiritual guidance, and the distant light by which travellers find their way through darkness.',
+                    'Character traits: Perceptive, dignified, reserved, unexpectedly sharp-witted.',
+                    'Reason for joining: She wanted to guide the House spiritually while ensuring that its use of dangerous magic remained restrained.',
+                    'Role in the House: Priest, spiritual adviser, healer, and moral counterbalance to Gloomward.'
+                ]
+            },
+            {
+                firstName: 'Thorgun', surname: 'Stormward', gender: 'Male', race: 'Dwarf', className: 'Shaman', primary: 'DPS', secondary: 'Healer', professions: 'Alchemy · Herbalism',
+                lore: [
+                    'Thorgun was always considered unusual among his kin. He respected stone and steel, but heard meaning in thunder, flowing water, and the wind moving through mountain passes. Rather than imposing his will upon the elements, he treated them as forces with which one negotiated.',
+                    'He first met Thoric Steelward during a dispute at a mining site. The miners believed unstable tunnels required stronger supports. Thorgun insisted that careless excavation had disturbed something beneath the mountain. Thoric initially dismissed this as superstition until the stone itself began behaving in ways no ordinary collapse could explain.',
+                    'House Ward helped evacuate the miners while Thorgun calmed the elemental disturbance. Thoric later invited him to join, partly out of gratitude and partly because he never wanted to admit publicly how wrong he had been.',
+                    'Thorgun adopted the name Stormward because he neither commands the storm nor fears it. He stands at the place where its power meets those who cannot withstand it.',
+                    'Character traits: Boisterous, intuitive, fond of stories, considerably wiser than his manner suggests.',
+                    'Reason for joining: He saw the House as a way to resolve conflicts between civilisation and the elemental world.',
+                    'Role in the House: Elemental adviser, battle support, healer, and maker of potions and restorative brews.'
+                ]
+            },
+            {
+                firstName: 'Vaelira', surname: 'Duskward', gender: 'Female', race: 'Night Elf', className: 'Rogue', primary: 'DPS', secondary: 'DPS', professions: 'Leatherworking · Skinning',
+                lore: [
+                    'Vaelira served as a watcher and silent protector, operating in places where formal soldiers would be too visible. She became skilled at moving through hostile territory, gathering information, and ending threats before they reached the people under her protection.',
+                    'Her first contact with House Ward was not friendly. Vaelira had been tracking smugglers who trafficked in stolen relics and rare animal materials. She believed House Ward was purchasing from them and infiltrated the House to gather evidence.',
+                    'She discovered that Garrick Wildward was also tracking the smugglers and that Lucian Gloomward had arranged a false transaction to expose their leaders. Rather than revealing herself, Vaelira secretly assisted the operation. Garrick nevertheless detected her presence and left a place for her beside the campfire without confronting her.',
+                    'After the smugglers were defeated, Vaelira admitted why she had followed the House. Tiberion offered her membership, reasoning that anyone capable of infiltrating them and honest enough to confess it was precisely the kind of person they needed.',
+                    'She chose the name Duskward because dusk is neither daylight nor darkness. It is the uncertain boundary where her talents are most valuable.',
+                    'Character traits: Independent, suspicious, incisive, protective beneath a distant exterior.',
+                    'Reason for joining: The House proved that it valued truth and protection more than pride or appearances.',
+                    'Role in the House: Infiltrator, intelligence gatherer, investigator, and covert protector.'
+                ]
+            }
+        ];
+
+        for (const member of roster) {
+            const card = document.createElement('article');
+            card.className = 'member-card';
+            const cardHeader = document.createElement('div');
+            cardHeader.className = 'card-header';
+            const title = document.createElement('h3');
+            title.textContent = `${member.firstName} ${member.surname}`;
+            const subtitle = document.createElement('p');
+            subtitle.className = 'card-subtitle';
+            subtitle.textContent = `${member.race} ${member.className} · Alliance`;
+            cardHeader.append(title, subtitle);
+
+            const cardBody = document.createElement('div');
+            cardBody.className = 'card-body';
+            const roles = member.primary === member.secondary
+                ? [['Role', member.primary]]
+                : [['Primary role', member.primary], ['Secondary role', member.secondary]];
+            for (const [label, value] of [
+                ['Gender', member.gender],
+                ...roles,
+                ['Professions', member.professions]
+            ]) {
+                const line = document.createElement('p');
+                line.className = 'meta-line';
+                const metaLabel = document.createElement('span');
+                metaLabel.className = 'meta-label';
+                metaLabel.textContent = `${label}: `;
+                line.append(metaLabel, document.createTextNode(value));
+                cardBody.append(line);
+            }
+
+            const memberDetails = document.createElement('div');
+            memberDetails.className = 'member-details';
+            for (const detail of member.lore.slice(-3)) {
+                const separator = detail.indexOf(': ');
+                const line = document.createElement('p');
+                line.className = 'meta-line';
+                const label = document.createElement('span');
+                label.className = 'meta-label';
+                label.textContent = `${detail.slice(0, separator)}: `;
+                line.append(label, document.createTextNode(detail.slice(separator + 2)));
+                memberDetails.append(line);
+            }
+            cardBody.append(memberDetails);
+
+            const lore = document.createElement('details');
+            lore.className = 'character-lore';
+            const loreSummary = document.createElement('summary');
+            loreSummary.textContent = `The story of ${member.firstName} ${member.surname}`;
+            lore.append(loreSummary);
+            for (const paragraph of member.lore.slice(0, -3)) {
+                const loreParagraph = document.createElement('p');
+                loreParagraph.textContent = paragraph;
+                lore.append(loreParagraph);
+            }
+
+            cardBody.append(lore);
+            card.append(cardHeader, cardBody);
+            document.querySelector('.roster-grid').append(card);
+        }
+
+        const tabs = Array.from(document.querySelectorAll('[role="tab"]'));
+        const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+
+        function activateTab(tab, moveFocus = false) {
+            for (const item of tabs) {
+                const selected = item === tab;
+                item.classList.toggle('active', selected);
+                item.setAttribute('aria-selected', String(selected));
+                item.tabIndex = selected ? 0 : -1;
+            }
+
+            for (const panel of panels) {
+                const selected = panel.id === tab.getAttribute('aria-controls');
+                panel.classList.toggle('active', selected);
+                panel.hidden = !selected;
+            }
+
+            if (moveFocus) tab.focus();
+        }
+
+        for (const [index, tab] of tabs.entries()) {
+            tab.addEventListener('click', () => activateTab(tab));
+            tab.addEventListener('keydown', event => {
+                let nextIndex;
+                if (event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
+                if (event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
+                if (event.key === 'Home') nextIndex = 0;
+                if (event.key === 'End') nextIndex = tabs.length - 1;
+                if (nextIndex !== undefined) {
+                    event.preventDefault();
+                    activateTab(tabs[nextIndex], true);
+                }
+            });
+        }
+
+    </script>
+</body>
+</html>
